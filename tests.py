@@ -1,8 +1,14 @@
 import pytest
+from main import BooksCollector
+
+@pytest.fixture
+def collector():
+    return BooksCollector()
+
 
 @pytest.mark.parametrize("genre,expected_books", [
     ("Фантастика", ["Книга1", "Книга2"]),
-    ("Ужасы", []),  # <-- важно: пустой список, а не просто ('Ужасы',)
+    ("Ужасы", []),
 ])
 def test_get_books_with_specific_genre(collector, genre, expected_books):
     collector.add_new_book("Книга1")
@@ -97,8 +103,11 @@ def test_delete_book_from_favorites_removes_book(collector):
 
 
 def test_get_books_genre_returns_correct_genre(collector):
-    name = "Книга с жанром"
-    genre = "Фантастика"
-    collector.add_new_book(name)
-    collector.set_book_genre(name, genre)
-    assert collector.get_books_genre(name) == genre
+    collector.add_new_book("Гарри Поттер")
+    collector.set_book_genre("Гарри Поттер", "Фантастика")
+
+    result = collector.get_books_genre()
+
+    assert isinstance(result, dict), "Метод должен возвращать словарь"
+    assert "Гарри Поттер" in result, "Книга должна быть в словаре"
+    assert result["Гарри Поттер"] == "Фантастика", "Жанр должен совпадать с установленным"
