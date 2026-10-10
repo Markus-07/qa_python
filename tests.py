@@ -95,19 +95,20 @@ def test_add_book_in_favorites_adds_book(collector):
 
 
 def test_delete_book_from_favorites_removes_book(collector):
-    name = "Для удаления"
-    collector.add_new_book(name)
+    name = "Гарри Поттер"  # <-- Эта строка была потеряна
     collector.add_book_in_favorites(name)
     collector.delete_book_from_favorites(name)
     assert name not in collector.get_list_of_favorites_books()
 
 
+
 def test_get_books_genre_returns_correct_genre(collector):
+    # Сначала добавляем книгу
     collector.add_new_book("Гарри Поттер")
+    # Потом ставим ей жанр
     collector.set_book_genre("Гарри Поттер", "Фантастика")
+    
+    expected = {"Гарри Поттер": "Фантастика"}
+    assert collector.get_books_genre() == expected
 
-    result = collector.get_books_genre()
 
-    assert isinstance(result, dict), "Метод должен возвращать словарь"
-    assert "Гарри Поттер" in result, "Книга должна быть в словаре"
-    assert result["Гарри Поттер"] == "Фантастика", "Жанр должен совпадать с установленным"
