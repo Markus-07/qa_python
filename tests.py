@@ -95,9 +95,22 @@ def test_add_book_in_favorites_adds_book(collector):
 
 
 def test_delete_book_from_favorites_removes_book(collector):
-    name = "Гарри Поттер"  # <-- Эта строка была потеряна
+    name = "Гарри Поттер"
+    genre = "Фантастика"
+
+
+    collector.add_new_book(name)
+
+  
+    collector.set_book_genre(name, genre)
+
+
     collector.add_book_in_favorites(name)
+    assert name in collector.get_list_of_favorites_books()
+
+
     collector.delete_book_from_favorites(name)
+
     assert name not in collector.get_list_of_favorites_books()
 
 
