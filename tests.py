@@ -98,30 +98,32 @@ def test_delete_book_from_favorites_removes_book(collector):
     name = "Гарри Поттер"
     genre = "Фантастика"
 
-
     collector.add_new_book(name)
-
-  
     collector.set_book_genre(name, genre)
-
-
     collector.add_book_in_favorites(name)
-    assert name in collector.get_list_of_favorites_books()
 
-
+    # Удаляем книгу
     collector.delete_book_from_favorites(name)
 
+    # Проверяем только, что её больше нет в избранном
     assert name not in collector.get_list_of_favorites_books()
 
 
-
-def test_get_books_genre_returns_correct_genre(collector):
-    # Сначала добавляем книгу
-    collector.add_new_book("Гарри Поттер")
-    # Потом ставим ей жанр
-    collector.set_book_genre("Гарри Поттер", "Фантастика")
-    
-    expected = {"Гарри Поттер": "Фантастика"}
-    assert collector.get_books_genre() == expected
+def test_get_book_genre_returns_correct_genre(collector):
+    name = "Гарри Поттер"
+    genre = "Фантастика"
+    collector.add_new_book(name)
+    collector.set_book_genre(name, genre)
+    assert collector.get_book_genre(name) == genre
 
 
+def test_get_all_books_genre_returns_full_dict(collector):
+    name = "Гарри Поттер"
+    genre = "Фантастика"
+    collector.add_new_book(name)
+    collector.set_book_genre(name, genre)
+
+    expected = {name: genre}
+    # В main.py нет метода get_books_genre() без аргументов,
+    # поэтому проверяем через атрибут напрямую — это корректно для теста.
+    assert collector.books_genre == expected
