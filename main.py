@@ -1,59 +1,57 @@
 class BooksCollector:
+
     def __init__(self):
-        # Словарь: {название_книги: жанр}
         self.books_genre = {}
-        # Список избранных книг
         self.favorites = []
-        # Допустимые жанры
         self.genre = ['Фантастика', 'Ужасы', 'Детективы', 'Мультфильмы', 'Комедии']
-        # Жанры с возрастными ограничениями
         self.genre_age_rating = ['Ужасы', 'Детективы']
 
-    def add_new_book(self, name: str) -> bool:
-        """Добавляет книгу, если имя не пустое и не длиннее 40 символов."""
-        if not name or len(name) > 40:
-            return False
-        
-        if name not in self.books_genre:
-            self.books_genre[name] = ""  # Жанр пока пустой
-            return True
-        return False
+    # добавляем новую книгу
+    def add_new_book(self, name):
+        if not self.books_genre.get(name) and 0 < len(name) < 41:
+            self.books_genre[name] = ''
 
-    def set_book_genre(self, name: str, genre: str) -> None:
-        """Устанавливает жанр для книги, если она существует и жанр разрешён."""
+    # устанавливаем книге жанр
+    def set_book_genre(self, name, genre):
         if name in self.books_genre and genre in self.genre:
             self.books_genre[name] = genre
 
-    def get_book_genre(self, name: str):
-        """Возвращает жанр книги по её названию."""
+    # получаем жанр книги по её имени
+    def get_book_genre(self, name):
         return self.books_genre.get(name)
 
-    def get_books_with_specific_genre(self, genre: str) -> list[str]:
-        """Возвращает список книг заданного жанра."""
-        return [book for book, g in self.books_genre.items() if g == genre]
+    # выводим список книг с определённым жанром
+    def get_books_with_specific_genre(self, genre):
+        books_with_specific_genre = []
+        if self.books_genre and genre in self.genre:
+            for name, book_genre in self.books_genre.items():
+                if book_genre == genre:
+                    books_with_specific_genre.append(name)
+        return books_with_specific_genre
 
-    def get_books_for_children(self) -> list[str]:
-        """
-        Возвращает книги, подходящие детям.
-        Логика: книга подходит, если её жанр есть в списке допустимых
-        и при этом не входит в список жанров с возрастными ограничениями.
-        """
-        return [
-            book for book, genre in self.books_genre.items()
-            if genre in self.genre and genre not in self.genre_age_rating
-        ]
+    # получаем словарь books_genre
+    def get_books_genre(self):
+        return self.books_genre
 
-    def add_book_in_favorites(self, name: str) -> None:
-        """Добавляет книгу в избранное, только если она есть в коллекции и ещё не в избранном."""
-        if name in self.books_genre and name not in self.favorites:
-            self.favorites.append(name)
+    # возвращаем книги, подходящие детям
+    def get_books_for_children(self):
+        books_for_children = []
+        for name, genre in self.books_genre.items():
+            if genre not in self.genre_age_rating and genre in self.genre:
+                books_for_children.append(name)
+        return books_for_children
 
-    def delete_book_from_favorites(self, name: str) -> None:
-        """Удаляет книгу из избранного, если она там есть."""
+    # добавляем книгу в Избранное
+    def add_book_in_favorites(self, name):
+        if name in self.books_genre:
+            if name not in self.favorites:
+                self.favorites.append(name)
+
+    # удаляем книгу из Избранного
+    def delete_book_from_favorites(self, name):
         if name in self.favorites:
             self.favorites.remove(name)
 
-    def get_list_of_favorites_books(self) -> list[str]:
-        """Возвращает список избранных книг."""
+    # получаем список Избранных книг
+    def get_list_of_favorites_books(self):
         return self.favorites
-

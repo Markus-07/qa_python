@@ -102,11 +102,10 @@ def test_delete_book_from_favorites_removes_book(collector):
     collector.set_book_genre(name, genre)
     collector.add_book_in_favorites(name)
 
-    # Удаляем книгу
     collector.delete_book_from_favorites(name)
 
-    # Проверяем только, что её больше нет в избранном
     assert name not in collector.get_list_of_favorites_books()
+
 
 
 def test_get_book_genre_returns_correct_genre(collector):
@@ -124,6 +123,5 @@ def test_get_all_books_genre_returns_full_dict(collector):
     collector.set_book_genre(name, genre)
 
     expected = {name: genre}
-    # В main.py нет метода get_books_genre() без аргументов,
-    # поэтому проверяем через атрибут напрямую — это корректно для теста.
-    assert collector.books_genre == expected
+    assert collector.get_books_genre() == expected
+
